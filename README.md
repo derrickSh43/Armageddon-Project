@@ -46,7 +46,8 @@ All regions are interconnected with **Transit Gateways (TGWs)**, configured with
 ## Architecture
 
 ### Network Overview
-![Network Diagram](https://github.com/user-attachments/assets/baf58f61-42a1-4835-a173-8df9b46f9965)
+![Network Diagram](https://github.com/user-attachments/assets/6ba644a0-d35f-4fa3-b12f-2a84df6a1f97)
+
 
 
 ### Routing Architecture
