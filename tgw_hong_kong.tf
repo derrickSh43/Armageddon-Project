@@ -43,7 +43,7 @@ resource "aws_ec2_transit_gateway_peering_attachment" "hub_to_spoke_hong_kong" {
   peer_transit_gateway_id = aws_ec2_transit_gateway.peer.id 
   peer_region             = "ap-northeast-1" 
   tags = {
-    Name = "Hub to Spoke Peering new york" 
+    Name = "Hub to Spoke Peering Hong Kong" 
   }
   provider = aws.hong_kong 
 }
@@ -74,6 +74,39 @@ resource "aws_ec2_transit_gateway_route_table" "spoke_route_table_hong_kong" {
     Name = "Spoke TGW Route Table (hong_kong)" 
   }
   provider = aws.hong_kong 
+}
+#############################################################
+# TRANSIT GATEWAY ROUTE TABLE ASSOCIATIONS
+#############################################################
+
+# Associate Hub TGW Route Table with Tokyo VPC Attachment
+resource "aws_ec2_transit_gateway_route_table_association" "hub_tgw_vpc_hong_kong" {
+  transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.peer_attachment.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.hub_route_table_tko_hong_kong.id
+  provider = aws.tokyo
+}
+
+# Associate Spoke TGW Route Table with New York VPC Attachment
+resource "aws_ec2_transit_gateway_route_table_association" "spoke_tgw_vpc_hong_kong" {
+  transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.local_hong_kong_attachment.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.spoke_route_table_hong_kong.id
+  provider = aws.hong_kong
+}
+# Associate Spoke TGW Route Table with New York perring Attachment
+resource "aws_ec2_transit_gateway_route_table_association" "tgw_attachment_association_hong_kong" {
+  transit_gateway_attachment_id = aws_ec2_transit_gateway_peering_attachment.hub_to_spoke_hong_kong.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.spoke_route_table_hong_kong.id
+
+  provider = aws.hong_kong
+
+}
+# Associate Hub TGW Route Table with Tokyo Peering Attachment
+resource "aws_ec2_transit_gateway_route_table_association" "tgw_attachment_association_peer_hong_kong" {
+  transit_gateway_attachment_id = aws_ec2_transit_gateway_peering_attachment.hub_to_spoke_hong_kong.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.hub_to_spoke_tko_hong_kong.id
+
+  provider = aws.tokyo
+
 }
 
 #############################################################
